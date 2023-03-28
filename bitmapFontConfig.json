@@ -1,0 +1,10 @@
+{
+    "basePath": "bitmapFont",
+    "destination": "public/fonts",
+    "charset": "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!№;%:?*()_+-=.,/|\"'@#$^&{}[] ",
+    "fieldType": "sdf",
+    "firacode": {
+        "fontSize": 32,
+        "fieldType": "sdf"
+    }
+}
