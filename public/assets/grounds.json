@@ -1,0 +1,39 @@
+{
+  "frames": {
+    "grounds/isocube": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 85,
+        "h": 97
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 8,
+        "y": 2,
+        "w": 85,
+        "h": 97
+      },
+      "sourceSize": {
+        "w": 100,
+        "h": 100
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  },
+  "meta": {
+    "app": "",
+    "version": "1.0",
+    "image": "grounds.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 89,
+      "h": 101
+    },
+    "scale": 1
+  }
+}

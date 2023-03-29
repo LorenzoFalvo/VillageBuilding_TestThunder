@@ -1,0 +1,39 @@
+{
+  "frames": {
+    "buildings/IsoBarrel": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 79,
+        "h": 100
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 11,
+        "y": 0,
+        "w": 79,
+        "h": 100
+      },
+      "sourceSize": {
+        "w": 100,
+        "h": 100
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  },
+  "meta": {
+    "app": "",
+    "version": "1.0",
+    "image": "buildings.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 83,
+      "h": 104
+    },
+    "scale": 1
+  }
+}
