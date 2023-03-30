@@ -1,4 +1,4 @@
-import { AnimationTrack, BaseGraphic, BitmapText, FadeManager, Scene } from "@gamindo/thunder";
+import { AnimationTrack, BaseGraphic, BitmapText, Scene } from "@gamindo/thunder";
 
 export class Loading extends Scene {
     private logoCompleted: boolean = false;
@@ -27,6 +27,7 @@ export class Loading extends Scene {
 
         this.loader.addAsset("grounds", "assets/grounds.json");
         this.loader.addAsset("buildings", "assets/buildings.json");
+        this.loader.addAsset("player", "assets/player.json");
 
 
         await this.introLogo();
