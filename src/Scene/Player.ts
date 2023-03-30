@@ -1,9 +1,14 @@
 import { Scene, ActionData, AnimatedSprite, Easing, ThunderMath} from "@gamindo/thunder"
 import { Ground } from "./Ground";
-import { Layers } from "./Map";
+import { LAYER } from "./Map";
 
 
-
+export enum DIRECTION{
+    DOWN_LEFT = "DownLeft",
+    DOWN_RIGHT = "DownRight",
+    UP_LEFT = "UpLeft",
+    UP_RIGHT = "UpRight",
+}
 
 export class Player extends AnimatedSprite{
 
@@ -13,8 +18,11 @@ export class Player extends AnimatedSprite{
     private walk_UpRight: string[] = ["player/player_UpRight0", "player/player_UpRight1", "player/player_UpRight2", "player/player_UpRight3"];
     private walk_DownLeft: string[] = ["player/player_DownLeft0", "player/player_DownLeft1", "player/player_DownLeft2", "player/player_DownLeft3"];
     private walk_UpLeft: string[] = ["player/player_UpLeft0", "player/player_UpLeft1", "player/player_UpLeft2", "player/player_UpLeft3"];
+    // private lastDir: DIRECTION = DIRECTION.DOWN_RIGHT;
 
+    private currentAnim: string[] = [];
 
+    private currentTargetData: any;
 
     constructor(scene: Scene, x: number, y: number){
         super(scene, ["player/player_DownRight0"]);
@@ -27,6 +35,7 @@ export class Player extends AnimatedSprite{
         this.updateFrames({frames: this.walk_DownRight});
         this.fps = 10;
         this.isPaused = true;
+        this.currentAnim = this.walk_DownRight;
 
         
         // this.interactive = true;
@@ -36,47 +45,64 @@ export class Player extends AnimatedSprite{
     }
 
     public moveToNextPos(data: any): void{
-
-        console.log("move player");
-
-        this.scene.tweenManager.cleanTarget(this.position);
-
-        if(this.position.x < data.x){
-            if(this.position.y < data.y){
-                this.updateFrames({frames: this.walk_DownRight});
-            }else{
-                this.updateFrames({frames: this.walk_UpRight});
-            }
-        }else{
-            if(this.position.y < data.y){
-                this.updateFrames({frames: this.walk_DownLeft});
-            }else{
-                this.updateFrames({frames: this.walk_UpLeft});
-            }
-        }
-
-        this.scene.tweenManager.add({
-            target: this.position,
-            duration: 1000,
-            ease: Easing.Linear,
-            onStart: () => this.isPaused = false,
-            onUpdate: () => this.checkZIndex(),
-            onComplete: () => {
-                this.updateFrames({frames: this.walk_DownRight});
-                this.isPaused = true;
-            },
-            options: {
-                x: data.x,
-                y: data.y,
-            }
-        }, true);
-
         
+
+        if(data!= this.currentTargetData){
+            console.log("move player");
+
+            this.currentTargetData = data;
+            this.scene.tweenManager.cleanTarget(this.position);
+
+            const a = this.position.x - data.x;
+            const b = this.position.y - data.y;
+            const distance = ThunderMath.sqrt(a * a + b * b);
+            console.log("distance: " + distance);
+
+            if(this.position.x < data.x){
+                if(this.position.y < data.y){
+                    this.updateFrames({frames: this.walk_DownRight});
+                    this.currentAnim = this.walk_DownRight;
+                    // this.lastDir = DIRECTION.DOWN_RIGHT;
+                }else{
+                    this.updateFrames({frames: this.walk_UpRight});
+                    this.currentAnim = this.walk_UpRight;
+                    // this.lastDir = DIRECTION.UP_RIGHT;
+                }
+            }else{
+                if(this.position.y < data.y){
+                    this.updateFrames({frames: this.walk_DownLeft});
+                    this.currentAnim = this.walk_DownLeft;
+                    // this.lastDir = DIRECTION.DOWN_LEFT;
+                }else{
+                    this.updateFrames({frames: this.walk_UpLeft});
+                    this.currentAnim = this.walk_UpLeft;
+                    // this.lastDir = DIRECTION.UP_LEFT;
+                }
+            }
+            
+            
+            this.scene.tweenManager.add({
+                target: this.position,
+                duration: 5 * distance,
+                ease: Easing.Linear,
+                onStart: () => this.isPaused = false,
+                onUpdate: () => this.checkZIndex(),
+                onComplete: () => {
+                    // this.updateFrames({frames: this.walk_DownRight});
+                    this.updateFrames({frames: this.currentAnim});
+                    this.isPaused = true;
+                },
+                options: {
+                    x: data.x,
+                    y: data.y,
+                }
+            }, true);
+        }
     }
 
     private checkZIndex(){
         // console.log("Controllo profondità rispetto agli altri oggetti!");
-        this.scene.move(this, Layers.OBJECTS + this.position.y);
+        this.scene.move(this, LAYER.OBJECTS + this.position.y);
 
         // ThunderMath.overlapRectangles(this.wrappedBoundingBox, );
         this.scene.camera.moveTo(this.position.x, this.position.y);

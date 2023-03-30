@@ -2,7 +2,7 @@ import { Group, Loader, Scene, Sprite} from "@gamindo/thunder";
 import { Ground } from "./Ground";
 import { Player } from "./Player";
 
-export enum Layers {
+export enum LAYER {
     GROUND = 1,
     OBJECTS = 100,
 }
@@ -22,8 +22,8 @@ export class Map extends Group{
         const mapsJsonString = JSON.stringify(Loader.getJson("mapsJson"));
         this.allMaps = JSON.parse(mapsJsonString);
         
-        this.currentMap = this.GetCurrentMap();
-        this.CreateGround();
+        this.currentMap = this.getCurrentMap();
+        this.createGround();
 
         // this.interactive = true;
         // this.onPointerDown.subscribe(this.pointerDownLogic, this);
@@ -37,12 +37,12 @@ export class Map extends Group{
     //     // this.movePlayer(data.position.x, data.position.y);
     // }
 
-    private GetCurrentMap(): any{
-        const currentMap = this.allMaps.maps.test;
+    private getCurrentMap(): any{
+        const currentMap = this.allMaps.maps.secondTest;
         return currentMap;
     }
 
-    private CreateGround(): void{
+    private createGround(): void{
 
         // const row: number = this.currentMap.row;
         // const col: number = this.currentMap.col;
@@ -64,12 +64,12 @@ export class Map extends Group{
                 // console.log("Buco nel pavimento");
             }
         }
-        this.SortObject(this.groundArray, Layers.GROUND);
-        this.CreateObjects();
-        this.SpawnPlayer();
+        this.sortObject(this.groundArray, LAYER.GROUND);
+        this.createObjects();
+        this.spawnPlayer();
     }
 
-    private CreateObjects(): void{
+    private createObjects(): void{
 
         for (let i = 0; i < this.groundArray.length; i++) {
             if(this.groundArray[i].getFrame() == 1){
@@ -81,9 +81,9 @@ export class Map extends Group{
                 this.objectsArray.push(barileObj);
             }
         }
-        this.SortObject(this.objectsArray, Layers.OBJECTS);
+        this.sortObject(this.objectsArray, LAYER.OBJECTS);
     }
-    private SortObject(arrayObj: any[], zOffset: number): void{
+    private sortObject(arrayObj: any[], zOffset: number): void{
 
         const cloneArray: any[] = [...arrayObj];
         cloneArray.sort((a, b) => a.position.y - b.position.y);
@@ -93,13 +93,13 @@ export class Map extends Group{
         }
     }
 
-    private SpawnPlayer(): void{
+    private spawnPlayer(): void{
         // const randomGround: Ground = ThunderMath.randomChoice(this.groundArray);
 
         this.player = new Player(this.scene, this.groundArray[0].position.x, this.groundArray[0].position.y);
 
         console.log(this.player.position.x + " , " + this.player.position.y);
-        this.scene.move(this.player, Layers.OBJECTS + this.player.position.y);
+        this.scene.move(this.player, LAYER.OBJECTS + this.player.position.y);
 
         this.scene.camera.moveTo(this.player.position.x, this.player.position.y);
     }

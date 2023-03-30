@@ -41,11 +41,7 @@ export class Ground extends Sprite{
     }
 
     private pointerDownLogic(data: PointerEvent):void {
-
-        // console.log(this.position.x, this.position.y);
-
+        
         Ground.action.invoke([this.position]);
-
-        // this.movePlayer(data.position.x, data.position.y);
     }
 }
