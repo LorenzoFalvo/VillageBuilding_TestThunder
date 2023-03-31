@@ -1,4 +1,4 @@
-import { Group, Loader, Scene, Sprite} from "@gamindo/thunder";
+import { Group, Loader, Point, Scene, Sprite} from "@gamindo/thunder";
 import { Ground } from "./Ground";
 import { Player } from "./Player";
 
@@ -11,8 +11,11 @@ export class Map extends Group{
 
     private currentMap: any;
     private allMaps: any;
+
+    public gridArray: Ground[][] = [];
     private groundArray: Ground[] = [];
     private objectsArray: Sprite[] = [];
+    
     private player!: Player;
 
     constructor(scene: Scene, currentMap: string){
@@ -38,6 +41,7 @@ export class Map extends Group{
     // }
 
     private getCurrentMap(): any{
+        // const currentMap = this.allMaps.maps.test;
         const currentMap = this.allMaps.maps.secondTest;
         return currentMap;
     }
@@ -64,9 +68,40 @@ export class Map extends Group{
                 // console.log("Buco nel pavimento");
             }
         }
+
+        for (let x = 0; x < this.currentMap.row; x++) {
+            this.gridArray[x] = [];
+            for(let y = 0; y < this.currentMap.col; y++){
+
+                const currentGround = this.findCorrectGround(x, y);
+
+                if(currentGround != null){
+                    this.gridArray[x][y] = currentGround;
+                }
+        
+            }
+        }
+
+        console.log(this.gridArray);
+
         this.sortObject(this.groundArray, LAYER.GROUND);
         this.createObjects();
         this.spawnPlayer();
+    }
+
+    private findCorrectGround(row:number, col:number): any{
+        const groundArray: any[] = this.groundArray;
+        var correctGround: any;
+
+        for (let i= 0; i < groundArray.length; i++) {
+            if(groundArray[i].getFrame() != null){
+                if(groundArray[i].getRow() == row && groundArray[i].getCol() == col){
+                    correctGround = groundArray[i];
+                    break;
+                }
+            }
+        }
+        return correctGround;
     }
 
     private createObjects(): void{
@@ -96,7 +131,7 @@ export class Map extends Group{
     private spawnPlayer(): void{
         // const randomGround: Ground = ThunderMath.randomChoice(this.groundArray);
 
-        this.player = new Player(this.scene, this.groundArray[0].position.x, this.groundArray[0].position.y);
+        this.player = new Player(this.scene, this.groundArray[0]);
 
         console.log(this.player.position.x + " , " + this.player.position.y);
         this.scene.move(this.player, LAYER.OBJECTS + this.player.position.y);
@@ -107,4 +142,10 @@ export class Map extends Group{
     public getPlayer(): Player{
         return this.player;
     }
+
+    public getGroundArray(): Ground[]{
+        return this.groundArray;
+    }
+
+    
 }
