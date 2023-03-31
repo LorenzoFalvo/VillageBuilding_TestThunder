@@ -94,6 +94,9 @@ export class Ground extends Sprite{
     }
 
     public updateNeighbors(grid: Ground[][]): Ground[] {
+
+        this.neighbors = [];
+
         const { row, col } = this;
     
         if (row > 0) {
@@ -110,5 +113,15 @@ export class Ground extends Sprite{
         }
 
         return this.neighbors;
+    }
+
+    public resetVariable(): void{
+        this.f = 0;
+        this.g = 0;
+        this.h = 0;
+        this.neighbors = [];
+        this.parent = undefined;
+
+        this.setFrame("grounds/isocube");
     }
 }

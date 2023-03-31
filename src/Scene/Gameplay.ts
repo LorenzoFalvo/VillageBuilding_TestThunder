@@ -60,26 +60,40 @@ export class Gameplay extends Scene {
         console.log("TEST ASTART PATHFINDING");
         
         console.log("DATA: " + data[0] + " , " + data[1]);
-        console.log(this.currentMap.gridArray[data[0]][data[1]]);
+        // console.log(this.currentMap.gridArray[data[0]][data[1]]);
         // console.log(this.currentMap.gridArray[data[0]][data[1]].getGroundInfo());
 
         const ground = this.currentMap.getGroundArray();
-        for(let i = 0; i < ground.length; i++){
-            ground[i].setFrame("grounds/isocube");
-        }
-
+        // for(let i = 0; i < ground.length; i++){
+        //     ground[i].setFrame("grounds/isocube");
+        // }
+        // console.log( "Player Row & Col: " + this.player.currentRow + " , " + this.player.currentCol);
         const grid: Ground[][] = this.currentMap.gridArray;
+        // console.log("Grid Array: " + grid);
         const startNode = this.player.getCurrentGround();
-        const endNode: Ground = this.currentMap.gridArray[data[0]][data[1]];
-        const astar = new AStar(grid, startNode, endNode);
-        const path = astar.findPath();
+        const endNode: Ground = grid[data[0]][data[1]];
 
-        for(let i = 0; i < path.length; i++){
-            path[i].setFrame("grounds/isocube_green");
+        if(grid[data[0]][data[1]] != startNode){
+
+            for(let i = 0; i < ground.length; i++){
+                ground[i].resetVariable();
+            }
+            const astar = new AStar(grid, startNode, endNode);
+            const path = astar.findPath();
+
+            astar.shutdown();
+            
+            for(let i = 1; i < path.length; i++){
+                path[i].setFrame("grounds/isocube_green");
+            }
+            console.log(path);
+            
+            this.player.moveToNextPos(1, path)
+        }else{
+            console.log("Is the same position");
         }
-        console.log(path);
+
         
-        this.player.moveToNextPos(path)
     }
 
 }

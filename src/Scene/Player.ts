@@ -23,7 +23,9 @@ export class Player extends AnimatedSprite{
     private currentAnim: string[] = [];
 
     private currentTargetData: any;
-    private currentGridPos: Ground;
+    private currentGridPos: any;
+    public currentRow: number;
+    public currentCol: number;
 
     constructor(scene: Scene, startGround: Ground){
         super(scene, ["player/player_DownRight0"]);
@@ -32,6 +34,8 @@ export class Player extends AnimatedSprite{
         
         this.position.set(startGround.position.x, startGround.position.y);
         this.currentGridPos = startGround;
+        this.currentRow = startGround.getRow();
+        this.currentCol = startGround.getCol();
         scene.add(this);
         
         this.updateFrames({frames: this.walk_DownRight});
@@ -102,30 +106,42 @@ export class Player extends AnimatedSprite{
     //     }
     // }
 
-    public moveToNextPos(data: Ground[]): void{
+    public moveToNextPos(index: number, data: Ground[]): void{
+        this.scene.tweenManager.cleanTarget(this.position);
         
-        for(let i = 0; i < data.length; i++){
-            
-            this.scene.tweenManager.add({
-                target: this.position,
-                duration: 1000,
-                // delay: 1000 * i,
-                ease: Easing.Linear,
-                onStart: () => this.isPaused = false,
-                onUpdate: () => this.checkZIndex(),
-                onComplete: () => {
-                    // this.updateFrames({frames: this.walk_DownRight});
-                    this.updateFrames({frames: this.currentAnim});
-                    this.isPaused = true;
-                },
-                options: {
-                    x: data[i].position.x,
-                    y: data[i].position.y,
-                }
-            }, true);
+        this.scene.tweenManager.add({
+            target: this.position,
+            duration: 250,
+            // delay: 1000 * index,
+            ease: Easing.Linear,
+            onStart: () => this.isPaused = false,
+            onUpdate: () => this.checkZIndex(),
+            onComplete: () => {
+                // this.updateFrames({frames: this.walk_DownRight});
+                // this.currentGridPos = data[i];
+                data[index].setFrame("grounds/isocube");
 
-        }
+                if(index < data.length-1){
+                    console.log("Move to next Pos: " + index++);
+                    this.moveToNextPos(index++, data);
+                    this.currentRow = data[index-1].getRow();
+                    this.currentCol = data[index-1].getCol();
+
+                    this.currentGridPos = data[index-1];
+                    console.log(this.currentGridPos);
+                }
+
+                this.updateFrames({frames: this.currentAnim});
+                this.isPaused = true;
+            },
+            options: {
+                x: data[index].position.x,
+                y: data[index].position.y,
+            }
+        }, true);
+
     }
+    
 
     private checkZIndex(){
         // console.log("Controllo profondità rispetto agli altri oggetti!");

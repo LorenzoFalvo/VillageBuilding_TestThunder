@@ -40,17 +40,19 @@ export class AStar {
         let current = this.endNode;
 
         while (current.getParent()) {
-        path.unshift(current);
-        current = current.getParent();
+            console.log("Inside from getPath() while loop");
+            path.unshift(current);
+            current = current.getParent();
         }
 
         path.unshift(this.startNode);
-
+        console.log("Exit from getPath() while loop");
         return path;
     }
 
     public findPath(): Ground[] {
         while (this.openSet.length > 0) {
+            console.log("Inside findPath() while loop");
             // Find the node with the lowest f value in the open set
             let currentNode: Ground = this.openSet[0];
 
@@ -66,6 +68,7 @@ export class AStar {
 
             // Check if we have reached the end node
             if (currentNode === this.endNode) {
+                console.log("Exit from findPath() while loop");
                 return this.getPath();
             }
 
@@ -100,7 +103,12 @@ export class AStar {
         }
 
         // No path found
+        console.log("Exit from findPath() while loop");
         return [];
     }
 
+    public shutdown(): void {
+        console.log("Shutdown AStar class");
+        this.shutdown;
+    } 
 }
