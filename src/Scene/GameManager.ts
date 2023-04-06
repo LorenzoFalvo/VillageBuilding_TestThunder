@@ -14,11 +14,12 @@ export class GameManager extends Scene {
     // private background!: Sprite;
     private currentMap!: Map;
     private newMap: string = "";
+    private nextGroundPos: number = 0;
     private player!: Player;
     // private chooseActionCallback: (data: any[])=>void = (data)=>{this.player.moveToNextPos(data[0]);};
     private ground_ActionCallback: (data: any[])=>void = (data)=>{this.AStarTest(data);};
     // private MapObject_ActionCallback: (data: any[])=>void = (data)=>{this.ChangeMap(data[0]);};
-    private MapObject_ActionCallback: (data: any[])=>void = (data)=>{this.AStarTest(data, true); this.newMap = data[2]};
+    private MapObject_ActionCallback: (data: any[])=>void = (data)=>{this.AStarTest(data, true); this.newMap = data[2]; this.nextGroundPos = data[3]};
     
 
 
@@ -65,6 +66,7 @@ export class GameManager extends Scene {
     public ChangeMap(): void{
         
         this.currentMap.interactive = false;
+        let newGroundPos: Ground;
         // this.currentMap.removeObjects();
 
         this.tweenManager.add({
@@ -82,7 +84,8 @@ export class GameManager extends Scene {
                 this.currentMap = new Map(this, this.newMap);
                 this.add(this.currentMap);
 
-                this.player.setCurrentGround(this.currentMap.getGroundArray()[0]);
+                newGroundPos = this.currentMap.getNextGroundPos(this.nextGroundPos);
+                this.player.setCurrentGround(newGroundPos);
                 this.move(this.player, LAYER.OBJECTS + this.player.position.y);
                 this.camera.moveTo(this.player.position.x, this.player.position.y);
                 fadeManager.fadeIn(this, 1000);

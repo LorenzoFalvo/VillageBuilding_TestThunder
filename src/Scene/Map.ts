@@ -18,6 +18,7 @@ export class Map extends Group{
     public gridArray: Ground[][] = [];
     private groundArray: Ground[] = [];
     private objectsArray: Sprite[] = [];
+    private doorsArray: Door[] = [];
     // private doors: InteractiveObjects[] = [];
 
 
@@ -159,12 +160,13 @@ export class Map extends Group{
             const frame = doorsArray[i].frame;
             const groundPos = this.gridArray[row][col];
             const goToMap = doorsArray[i].goToMap;
+            const nextGroundPos = doorsArray[i].nextGroundPos;
 
             console.log("Ground Pos" + groundPos);
 
             switch(frame){
                 case 2:
-                    newObject = new Door(this.scene, "buildings/doorLeft", groundPos, goToMap);
+                    newObject = new Door(this.scene, "buildings/doorLeft", groundPos, goToMap, nextGroundPos);
                     newObject.pivot.set(0.7, 0.96);
                     this.objectsArray.push(newObject);
                     this.scene.add(newObject);
@@ -172,7 +174,7 @@ export class Map extends Group{
                     break;
 
                 case 3:
-                    newObject = new Door(this.scene, "buildings/doorRight", groundPos, goToMap);
+                    newObject = new Door(this.scene, "buildings/doorRight", groundPos, goToMap, nextGroundPos);
                     newObject.pivot.set(0.3, 0.96);
                     this.objectsArray.push(newObject);
                     this.scene.add(newObject);
@@ -180,7 +182,7 @@ export class Map extends Group{
                     break;
 
                 case 4:
-                    newObject = new Door(this.scene, "buildings/doorRight", groundPos, goToMap);
+                    newObject = new Door(this.scene, "buildings/doorRight", groundPos, goToMap, nextGroundPos);
                     newObject.pivot.set(0.67, 0.73);
                     this.objectsArray.push(newObject);
                     this.scene.add(newObject);
@@ -188,7 +190,7 @@ export class Map extends Group{
                     break;
 
                 case 5:
-                    newObject = new Door(this.scene, "buildings/doorLeft", groundPos, goToMap);
+                    newObject = new Door(this.scene, "buildings/doorLeft", groundPos, goToMap, nextGroundPos);
                     newObject.pivot.set(0.33, 0.73);
                     this.objectsArray.push(newObject);
                     this.scene.add(newObject);
@@ -198,6 +200,7 @@ export class Map extends Group{
                 default:
                     console.log("Don't have frame!");
             }
+            this.doorsArray.push(newObject);
         }
         // this.sortObjects(this.objectsArray, LAYER.OBJECTS);
     }
@@ -252,5 +255,10 @@ export class Map extends Group{
         // }
 
         
+    }
+
+    public getNextGroundPos(doorIndex: number): Ground{
+        const nextGround = this.doorsArray[doorIndex].getGroundPos();
+        return nextGround;
     }
 }

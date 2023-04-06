@@ -1069,25 +1069,29 @@
                     "frame": 2,
                     "row": 0,
                     "col": 0,
-                    "goToMap": "secondTest"
+                    "goToMap": "secondTest",
+                    "nextGroundPos": 1
                 },
                 {
                     "frame": 4,
                     "row": 8,
                     "col": 0,
-                    "goToMap": "secondTest"
+                    "goToMap": "secondTest",
+                    "nextGroundPos": 0
                 },
                 {
                     "frame": 5,
                     "row": 17,
                     "col": 0,
-                    "goToMap": "secondTest"
+                    "goToMap": "floor1",
+                    "nextGroundPos": 2
                 },
                 {
                     "frame": 3,
                     "row": 13,
                     "col": 11,
-                    "goToMap": "secondTest"
+                    "goToMap": "secondTest",
+                    "nextGroundPos": 1
                 }
             ],
             "objects": [
@@ -1868,25 +1872,29 @@
                     "frame": 4,
                     "row": 1,
                     "col": 0,
-                    "goToMap": "secondTest"
+                    "goToMap": "secondTest",
+                    "nextGroundPos": 0
                 },
                 {
                     "frame": 5,
                     "row": 8,
                     "col": 0,
-                    "goToMap": "test"
+                    "goToMap": "test",
+                    "nextGroundPos": 0
                 },
                 {
                     "frame": 2,
                     "row": 1,
                     "col": 8,
-                    "goToMap": "test"
+                    "goToMap": "test",
+                    "nextGroundPos": 0
                 },
                 {
                     "frame": 3,
                     "row": 8,
                     "col": 8,
-                    "goToMap": "floor1"
+                    "goToMap": "floor1",
+                    "nextGroundPos": 0
                 }
             ],
             "objects": [
@@ -2194,19 +2202,22 @@
                     "frame": 4,
                     "row": 2,
                     "col": 0,
-                    "goToMap": "secondTest"
+                    "goToMap": "secondTest",
+                    "nextGroundPos": 0
                 },
                 {
                     "frame": 5,
                     "row": 6,
                     "col": 6,
-                    "goToMap": "test"
+                    "goToMap": "test",
+                    "nextGroundPos": 0
                 },
                 {
                     "frame": 2,
                     "row": 2,
                     "col": 8,
-                    "goToMap": ""
+                    "goToMap": "test",
+                    "nextGroundPos": 2
                 }
             ],
             "objects": [

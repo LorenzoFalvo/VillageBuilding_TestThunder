@@ -52,21 +52,27 @@ interface InteractiveObject{
 export class Door extends MapObject implements InteractiveObject{
 
     private nextMap: string = "";
-    constructor(scene: Scene, frame: string, groundPos: Ground, nextMap: string){
+    private nextGroundPos: number;
+    constructor(scene: Scene, frame: string, groundPos: Ground, nextMap: string, nextGroundPos: number){
         super(scene, frame, groundPos)
 
         this.nextMap = nextMap;
+        this.nextGroundPos = nextGroundPos;
     }
 
     action(): void {
         // Door.action.invoke([this.nextMap]);
-        
+
     }
 
     goToPoint(): string {
         console.log("From Door Concrete Class");
-        Door.action.invoke([this.groundPos.getRow(), this.groundPos.getCol(), this.nextMap]);
+        Door.action.invoke([this.groundPos.getRow(), this.groundPos.getCol(), this.nextMap, this.nextGroundPos]);
         return "From Door Concrete Class";
+    }
+
+    public getGroundPos(): Ground{
+        return this.groundPos;
     }
 }
 
