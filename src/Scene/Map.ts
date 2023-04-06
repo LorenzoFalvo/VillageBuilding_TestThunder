@@ -6,7 +6,8 @@ import { Ground } from "./Ground";
 export enum LAYER {
     GROUND = 1,
     OBJECTS = 100,
-    DOOR = 1,
+    FRONT_DOOR = 200,
+    BACK_DOOR = 1
 }
 
 export class Map extends Group{
@@ -52,6 +53,10 @@ export class Map extends Group{
 
             case "secondTest":
                 currentMap = this.allMaps.maps.secondTest;
+                break;
+            
+            case "floor1":
+                currentMap = this.allMaps.maps.floor1;
                 break;
 
             default:
@@ -163,6 +168,7 @@ export class Map extends Group{
                     newObject.pivot.set(0.7, 0.96);
                     this.objectsArray.push(newObject);
                     this.scene.add(newObject);
+                    this.scene.move(newObject, LAYER.BACK_DOOR);
                     break;
 
                 case 3:
@@ -170,6 +176,7 @@ export class Map extends Group{
                     newObject.pivot.set(0.3, 0.96);
                     this.objectsArray.push(newObject);
                     this.scene.add(newObject);
+                    this.scene.move(newObject, LAYER.BACK_DOOR);
                     break;
 
                 case 4:
@@ -177,6 +184,7 @@ export class Map extends Group{
                     newObject.pivot.set(0.67, 0.73);
                     this.objectsArray.push(newObject);
                     this.scene.add(newObject);
+                    this.scene.move(newObject, LAYER.FRONT_DOOR + newObject.position.y);
                     break;
 
                 case 5:
@@ -184,13 +192,14 @@ export class Map extends Group{
                     newObject.pivot.set(0.33, 0.73);
                     this.objectsArray.push(newObject);
                     this.scene.add(newObject);
+                    this.scene.move(newObject, LAYER.FRONT_DOOR + newObject.position.y);
                     break;
 
                 default:
                     console.log("Don't have frame!");
             }
         }
-        this.sortObjects(this.objectsArray, LAYER.OBJECTS);
+        // this.sortObjects(this.objectsArray, LAYER.OBJECTS);
     }
 
     private sortObjects(arrayObj: any[], zOffset: number): void{
