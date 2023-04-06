@@ -1,38 +1,41 @@
-import { Group, Loader, Point, Scene, Sprite} from "@gamindo/thunder";
+import { Easing, Group, Loader, Point, Scene, Sprite, TweenAnimation} from "@gamindo/thunder";
+import { Chair, Door } from "./MapObject";
 import { Ground } from "./Ground";
-import { Player } from "./Player";
+// import { InteractiveObjects } from "./InteractiveObjects";
 
 export enum LAYER {
     GROUND = 1,
     OBJECTS = 100,
+    DOOR = 1,
 }
 
 export class Map extends Group{
 
     private currentMap: any;
     private allMaps: any;
+    private gameplayScene: Scene;
 
     public gridArray: Ground[][] = [];
     private groundArray: Ground[] = [];
     private objectsArray: Sprite[] = [];
-    
-    private player!: Player;
+    // private doors: InteractiveObjects[] = [];
+
 
     constructor(scene: Scene, currentMap: string){
         super(scene);
         console.log("Create Map");
-
+        this.gameplayScene = scene;
         const mapsJsonString = JSON.stringify(Loader.getJson("mapsJson"));
         this.allMaps = JSON.parse(mapsJsonString);
         
-        this.currentMap = this.getCurrentMap();
+        this.currentMap = this.getCurrentMap(currentMap);
         this.createGround();
 
         // this.interactive = true;
         // this.onPointerDown.subscribe(this.pointerDownLogic, this);
-
     }
 
+    
     // private pointerDownLogic(data: PointerEvent):void {
 
     //     console.log(this.position.x, this.position.y);
@@ -40,9 +43,23 @@ export class Map extends Group{
     //     // this.movePlayer(data.position.x, data.position.y);
     // }
 
-    private getCurrentMap(): any{
-        // const currentMap = this.allMaps.maps.test;
-        const currentMap = this.allMaps.maps.secondTest;
+    private getCurrentMap(mapName: string): any{
+
+        var currentMap: any;
+
+        switch(mapName){
+            case "test":
+                currentMap = this.allMaps.maps.test;
+                break;
+
+            case "secondTest":
+                currentMap = this.allMaps.maps.secondTest;
+                break;
+
+            default:
+                console.log("This map not exist: " + mapName);
+        }
+
         return currentMap;
     }
 
@@ -63,6 +80,7 @@ export class Map extends Group{
                 const obj_col = groundArray[x].col;
 
                 const groundPiece: Ground = new Ground(this.scene, obj_frame, obj_xPos, obj_yPos, obj_row, obj_col);
+                // this.add(groundPiece);
                 this.groundArray.push(groundPiece);
             }else{
                 // console.log("Buco nel pavimento");
@@ -84,9 +102,8 @@ export class Map extends Group{
 
         console.log(this.gridArray);
 
-        this.sortObject(this.groundArray, LAYER.GROUND);
+        this.sortGrid(this.groundArray);
         this.createObjects();
-        this.spawnPlayer();
     }
 
     private findCorrectGround(row:number, col:number): any{
@@ -106,46 +123,85 @@ export class Map extends Group{
 
     private createObjects(): void{
 
-        for (let i = 0; i < this.groundArray.length; i++) {
-            if(this.groundArray[i].getFrame() == 1){
+        const groundSorted = this.returnArraySorted(this.groundArray);
+
+        for (let i = 0; i < groundSorted.length; i++) {
+            if(groundSorted[i].getFrame() == 1){
                 const barileObj: Sprite = new Sprite(this.scene, "buildings/IsoBarrel");
                 barileObj.pivot.set(0.5, 0.81);
-                barileObj.position.set(this.groundArray[i].position.x, this.groundArray[i].position.y);
+                barileObj.position.set(groundSorted[i].position.x, groundSorted[i].position.y);
                 this.scene.add(barileObj);
+                // this.objectsArray.push(barileObj);
 
                 this.objectsArray.push(barileObj);
+            }else if(this.groundArray[i].getFrame() == 2){
+                // const doorObj: InteractiveObjects = new InteractiveObjects(this.scene, "buildings/doorLeft", this.groundArray[i]);
+                // doorObj.pivot.set(0.7, 0.96);
+                // this.scene.add(doorObj);
+
+                const doorObj: Door = new Door(this.scene, "buildings/doorLeft", this.groundArray[i]);
+                doorObj.pivot.set(0.7, 0.96);
+                this.objectsArray.push(doorObj);
+                this.scene.add(doorObj);
+
+                // const barileObj: Chair = new Chair(this.scene, "buildings/IsoBarrel", this.groundArray[i]);
+                // barileObj.pivot.set(0.7, 0.96);
+                // barileObj.position.set(barileObj.position.x + 50, barileObj.position.y + 100);
+                // this.scene.add(barileObj);
             }
         }
-        this.sortObject(this.objectsArray, LAYER.OBJECTS);
+        this.sortObjects(this.objectsArray, LAYER.OBJECTS);
     }
-    private sortObject(arrayObj: any[], zOffset: number): void{
+
+    private sortObjects(arrayObj: any[], zOffset: number): void{
+
+        const cloneArray = this.returnArraySorted(arrayObj);
+
+        for (let i = 0; i < cloneArray.length; i++) {
+            
+            this.scene.move(cloneArray[i], zOffset + cloneArray[i].position.y);
+            // this.add(cloneArray[i]);
+        }
+    }
+    
+    private sortGrid(arrayObj: any[]): void{
+
+        const cloneArray = this.returnArraySorted(arrayObj);
+
+        for (let i = 0; i < cloneArray.length; i++) {
+            
+            this.add(cloneArray[i]);
+        }
+    }
+
+    
+    private returnArraySorted(arrayObj: any[]): any[]{
 
         const cloneArray: any[] = [...arrayObj];
         cloneArray.sort((a, b) => a.position.y - b.position.y);
 
-        for (let i = 0; i < arrayObj.length; i++) {
-            this.scene.move(arrayObj[i], zOffset + arrayObj[i].position.y);
-        }
-    }
-
-    private spawnPlayer(): void{
-        // const randomGround: Ground = ThunderMath.randomChoice(this.groundArray);
-
-        this.player = new Player(this.scene, this.groundArray[0]);
-
-        console.log(this.player.position.x + " , " + this.player.position.y);
-        this.scene.move(this.player, LAYER.OBJECTS + this.player.position.y);
-
-        this.scene.camera.moveTo(this.player.position.x, this.player.position.y);
-    }
-
-    public getPlayer(): Player{
-        return this.player;
+        return cloneArray;
     }
 
     public getGroundArray(): Ground[]{
+
         return this.groundArray;
     }
 
-    
+    public removeObjects(): void{
+        
+        for(let i = 0; i < this.objectsArray.length; i++){
+            this.scene.remove(this.objectsArray[i]);
+        }
+        // for(let i = 0; i < this.objectsArray.length; i++){
+        //     this.scene.tweenManager.add({
+        //         target:this.objectsArray[i],
+        //         duration: 500,
+        //         onComplete: () => this.scene.remove(this.objectsArray[i]),
+        //         options:{alpha: 0}
+        //     }, true);
+        // }
+
+        
+    }
 }

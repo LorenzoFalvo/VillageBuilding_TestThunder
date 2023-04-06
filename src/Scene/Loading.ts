@@ -98,7 +98,7 @@ export class Loading extends Scene {
         if (this.logoCompleted) {
             // TODO: Move to next scene
             this.game.sceneManager.stop(this.name);
-            this.game.sceneManager.start("Gameplay");
+            this.game.sceneManager.start("GameManager");
          }
     }
 }

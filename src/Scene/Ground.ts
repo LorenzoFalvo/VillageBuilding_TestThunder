@@ -1,4 +1,4 @@
-import { Scene, Sprite, PointerEvent, ActionData, BaseFilter} from "@gamindo/thunder"
+import { Scene, Sprite, PointerEvent, ActionData} from "@gamindo/thunder"
 
 
 export class Ground extends Sprite{
@@ -42,14 +42,19 @@ export class Ground extends Sprite{
         }
 
         this.position.set(this.xPos, this.yPos);
-        scene.add(this);
+        // scene.add(this);
 
         this.onPointerDown.subscribe(this.pointerDownLogic, this);
+
+        // this.destroy();
     }
 
+    public destroyMe():void{
+        this.destroy();
+    }
     
     private pointerDownLogic(data: PointerEvent):void {
-        
+        console.log("Ground Action");
         // Ground.action.invoke([this.position]);
         Ground.action.invoke([this.row, this.col]);
     }

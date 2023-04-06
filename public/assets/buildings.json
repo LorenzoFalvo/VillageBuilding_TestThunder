@@ -1,8 +1,56 @@
 {
   "frames": {
-    "buildings/IsoBarrel": {
+    "buildings/doorLeft": {
       "frame": {
         "x": 2,
+        "y": 2,
+        "w": 36,
+        "h": 98
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 33,
+        "y": 1,
+        "w": 36,
+        "h": 98
+      },
+      "sourceSize": {
+        "w": 100,
+        "h": 100
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "buildings/doorRight": {
+      "frame": {
+        "x": 42,
+        "y": 2,
+        "w": 36,
+        "h": 98
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 33,
+        "y": 1,
+        "w": 36,
+        "h": 98
+      },
+      "sourceSize": {
+        "w": 100,
+        "h": 100
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "buildings/IsoBarrel": {
+      "frame": {
+        "x": 82,
         "y": 2,
         "w": 79,
         "h": 100
@@ -31,7 +79,7 @@
     "image": "buildings.png",
     "format": "RGBA8888",
     "size": {
-      "w": 83,
+      "w": 163,
       "h": 104
     },
     "scale": 1

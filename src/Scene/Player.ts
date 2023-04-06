@@ -1,6 +1,8 @@
 import { Scene, ActionData, AnimatedSprite, Easing, ThunderMath} from "@gamindo/thunder"
 import { Ground } from "./Ground";
+// import { InteractiveObjects } from "./InteractiveObjects";
 import { LAYER } from "./Map";
+import { MapObject } from "./MapObject";
 
 
 export enum DIRECTION{
@@ -108,13 +110,16 @@ export class Player extends AnimatedSprite{
 
     public moveToNextPos(index: number, data: Ground[]): void{
         this.scene.tweenManager.cleanTarget(this.position);
-        
+
         this.scene.tweenManager.add({
             target: this.position,
             duration: 250,
             // delay: 1000 * index,
             ease: Easing.Linear,
-            onStart: () => this.isPaused = false,
+            onStart: () => {
+                this.modifyCurrentAnim(data[index].position.x, data[index].position.y);
+                this.isPaused = false;
+                },
             onUpdate: () => this.checkZIndex(),
             onComplete: () => {
                 // this.updateFrames({frames: this.walk_DownRight});
@@ -122,14 +127,18 @@ export class Player extends AnimatedSprite{
                 data[index].setFrame("grounds/isocube");
 
                 if(index < data.length-1){
-                    console.log("Move to next Pos: " + index++);
-                    this.moveToNextPos(index++, data);
+                    // console.log("Move to next Pos: " + index++);
+                    index++;
+                    this.moveToNextPos(index, data);
                     this.currentRow = data[index-1].getRow();
                     this.currentCol = data[index-1].getCol();
 
                     this.currentGridPos = data[index-1];
-                    console.log(this.currentGridPos);
+                    // console.log(this.currentGridPos);
+                }else{
+                    console.log("Eseguo azione dell'oggetto cliccato!");
                 }
+                
 
                 this.updateFrames({frames: this.currentAnim});
                 this.isPaused = true;
@@ -142,7 +151,29 @@ export class Player extends AnimatedSprite{
 
     }
     
-
+    private modifyCurrentAnim(NextPosX:number, NextPosY:number): void{
+        if(this.position.x < NextPosX){
+            if(this.position.y < NextPosY){
+                this.updateFrames({frames: this.walk_DownRight});
+                this.currentAnim = this.walk_DownRight;
+                // this.lastDir = DIRECTION.DOWN_RIGHT;
+            }else{
+                this.updateFrames({frames: this.walk_UpRight});
+                this.currentAnim = this.walk_UpRight;
+                // this.lastDir = DIRECTION.UP_RIGHT;
+            }
+        }else{
+            if(this.position.y < NextPosY){
+                this.updateFrames({frames: this.walk_DownLeft});
+                this.currentAnim = this.walk_DownLeft;
+                // this.lastDir = DIRECTION.DOWN_LEFT;
+            }else{
+                this.updateFrames({frames: this.walk_UpLeft});
+                this.currentAnim = this.walk_UpLeft;
+                // this.lastDir = DIRECTION.UP_LEFT;
+            }
+        }
+    }
     private checkZIndex(){
         // console.log("Controllo profondità rispetto agli altri oggetti!");
         this.scene.move(this, LAYER.OBJECTS + this.position.y);
@@ -153,5 +184,10 @@ export class Player extends AnimatedSprite{
 
     public getCurrentGround(): Ground{
         return this.currentGridPos;
+    }
+
+    public setCurrentGround(ground: Ground): void{
+        this.currentGridPos = ground;
+        this.position.set(ground.position.x, ground.position.y);
     }
 }

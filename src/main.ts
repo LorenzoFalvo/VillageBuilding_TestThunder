@@ -1,5 +1,5 @@
 import { Game, Log, RESIZE_MODE } from "@gamindo/thunder";
-import { Gameplay } from "./Scene/Gameplay";
+import { GameManager } from "./Scene/GameManager";
 import { Loading } from "./Scene/Loading";
 import "./style.css";
 
@@ -16,7 +16,7 @@ window.onload = async (): Promise<void> => {
     app.color = 0x191919;
 
     app.sceneManager.add(new Loading({ game: app, key: "Loading", resizeMode: RESIZE_MODE.FIT }));
-    app.sceneManager.add(new Gameplay({ game: app, key: "Gameplay", resizeMode: RESIZE_MODE.FIT }));
+    app.sceneManager.add(new GameManager({ game: app, key: "GameManager", resizeMode: RESIZE_MODE.FIT }));
 
     app.sceneManager.start("Loading");
 
