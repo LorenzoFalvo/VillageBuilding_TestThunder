@@ -22,11 +22,11 @@ export abstract class MapObject extends Sprite{
         scene.add(this);
 
 
-        this.onPointerDown.subscribe(this.action, this);
+        this.onPointerDown.subscribe(this.goToPoint, this);
     }
     // public abstract groundPos():Ground;
 
-    public action(): string{
+    public goToPoint(): string{
 
         // const ground = this.groundPos();
         console.log("From Abstract Class");
@@ -45,20 +45,27 @@ export abstract class MapObject extends Sprite{
 // }
 
 interface InteractiveObject{
-    goToPoint(): void;
+    action(): void;
 
 }
 
 export class Door extends MapObject implements InteractiveObject{
 
-    
-    goToPoint(): void {
+    private nextMap: string = "";
+    constructor(scene: Scene, frame: string, groundPos: Ground, nextMap: string){
+        super(scene, frame, groundPos)
+
+        this.nextMap = nextMap;
+    }
+
+    action(): void {
+        // Door.action.invoke([this.nextMap]);
         
     }
 
-    action(): string {
+    goToPoint(): string {
         console.log("From Door Concrete Class");
-        Door.action.invoke(["secondTest"]);
+        Door.action.invoke([this.groundPos.getRow(), this.groundPos.getCol(), this.nextMap]);
         return "From Door Concrete Class";
     }
 }
@@ -66,11 +73,11 @@ export class Door extends MapObject implements InteractiveObject{
 export class Chair extends MapObject implements InteractiveObject{
 
     
-    goToPoint(): void {
+    action(): void {
         
     }
 
-    action(): string {
+    goToPoint(): string {
         console.log("From Chair Concrete Class");
         Chair.action.invoke([this.groundPos.getRow(),this.groundPos.getCol()]);
         return "From Chair Concrete Class";

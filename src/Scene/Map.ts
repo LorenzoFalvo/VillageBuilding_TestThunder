@@ -13,7 +13,6 @@ export class Map extends Group{
 
     private currentMap: any;
     private allMaps: any;
-    private gameplayScene: Scene;
 
     public gridArray: Ground[][] = [];
     private groundArray: Ground[] = [];
@@ -24,7 +23,6 @@ export class Map extends Group{
     constructor(scene: Scene, currentMap: string){
         super(scene);
         console.log("Create Map");
-        this.gameplayScene = scene;
         const mapsJsonString = JSON.stringify(Loader.getJson("mapsJson"));
         this.allMaps = JSON.parse(mapsJsonString);
         
@@ -67,7 +65,7 @@ export class Map extends Group{
 
         // const row: number = this.currentMap.row;
         // const col: number = this.currentMap.col;
-        const groundArray: any[] = this.currentMap.assets;
+        const groundArray: any[] = this.currentMap.grounds;
         // groundArray.sort((a, b) => a.y - b.y);
 
 
@@ -104,6 +102,7 @@ export class Map extends Group{
 
         this.sortGrid(this.groundArray);
         this.createObjects();
+        this.createDoors();
     }
 
     private findCorrectGround(row:number, col:number): any{
@@ -124,30 +123,71 @@ export class Map extends Group{
     private createObjects(): void{
 
         const groundSorted = this.returnArraySorted(this.groundArray);
+        var newObject: any;
 
         for (let i = 0; i < groundSorted.length; i++) {
-            if(groundSorted[i].getFrame() == 1){
-                const barileObj: Sprite = new Sprite(this.scene, "buildings/IsoBarrel");
-                barileObj.pivot.set(0.5, 0.81);
-                barileObj.position.set(groundSorted[i].position.x, groundSorted[i].position.y);
-                this.scene.add(barileObj);
-                // this.objectsArray.push(barileObj);
+            switch(groundSorted[i].getFrame()){
+                case 1:
+                    newObject = new Sprite(this.scene, "buildings/IsoBarrel");
+                    newObject.pivot.set(0.5, 0.81);
+                    newObject.position.set(groundSorted[i].position.x, groundSorted[i].position.y);
+                    this.objectsArray.push(newObject);
+                    this.scene.add(newObject);
+                    break;
 
-                this.objectsArray.push(barileObj);
-            }else if(this.groundArray[i].getFrame() == 2){
-                // const doorObj: InteractiveObjects = new InteractiveObjects(this.scene, "buildings/doorLeft", this.groundArray[i]);
-                // doorObj.pivot.set(0.7, 0.96);
-                // this.scene.add(doorObj);
+                default:
+                    console.log("Don't have frame!");
+            }
+        }
+        this.sortObjects(this.objectsArray, LAYER.OBJECTS);
+    }
 
-                const doorObj: Door = new Door(this.scene, "buildings/doorLeft", this.groundArray[i]);
-                doorObj.pivot.set(0.7, 0.96);
-                this.objectsArray.push(doorObj);
-                this.scene.add(doorObj);
+    private createDoors(): void{
+        // console.log("Doors" + this.currentMap.doors);
+        const doorsArray = this.currentMap.doors;
+        console.log("Doors" + doorsArray);
+        var newObject: any;
 
-                // const barileObj: Chair = new Chair(this.scene, "buildings/IsoBarrel", this.groundArray[i]);
-                // barileObj.pivot.set(0.7, 0.96);
-                // barileObj.position.set(barileObj.position.x + 50, barileObj.position.y + 100);
-                // this.scene.add(barileObj);
+        for (let i = 0; i < doorsArray.length; i++) {
+            const row = doorsArray[i].row;
+            const col = doorsArray[i].col;
+            const frame = doorsArray[i].frame;
+            const groundPos = this.gridArray[row][col];
+            const goToMap = doorsArray[i].goToMap;
+
+            console.log("Ground Pos" + groundPos);
+
+            switch(frame){
+                case 2:
+                    newObject = new Door(this.scene, "buildings/doorLeft", groundPos, goToMap);
+                    newObject.pivot.set(0.7, 0.96);
+                    this.objectsArray.push(newObject);
+                    this.scene.add(newObject);
+                    break;
+
+                case 3:
+                    newObject = new Door(this.scene, "buildings/doorRight", groundPos, goToMap);
+                    newObject.pivot.set(0.3, 0.96);
+                    this.objectsArray.push(newObject);
+                    this.scene.add(newObject);
+                    break;
+
+                case 4:
+                    newObject = new Door(this.scene, "buildings/doorRight", groundPos, goToMap);
+                    newObject.pivot.set(0.67, 0.73);
+                    this.objectsArray.push(newObject);
+                    this.scene.add(newObject);
+                    break;
+
+                case 5:
+                    newObject = new Door(this.scene, "buildings/doorLeft", groundPos, goToMap);
+                    newObject.pivot.set(0.33, 0.73);
+                    this.objectsArray.push(newObject);
+                    this.scene.add(newObject);
+                    break;
+
+                default:
+                    console.log("Don't have frame!");
             }
         }
         this.sortObjects(this.objectsArray, LAYER.OBJECTS);

@@ -13,10 +13,12 @@ export class GameManager extends Scene {
 
     // private background!: Sprite;
     private currentMap!: Map;
+    private newMap: string = "";
     private player!: Player;
     // private chooseActionCallback: (data: any[])=>void = (data)=>{this.player.moveToNextPos(data[0]);};
     private ground_ActionCallback: (data: any[])=>void = (data)=>{this.AStarTest(data);};
-    private MapObject_ActionCallback: (data: any[])=>void = (data)=>{this.ChangeMap(data[0]);};
+    // private MapObject_ActionCallback: (data: any[])=>void = (data)=>{this.ChangeMap(data[0]);};
+    private MapObject_ActionCallback: (data: any[])=>void = (data)=>{this.AStarTest(data, true); this.newMap = data[2]};
     
 
 
@@ -51,8 +53,6 @@ export class GameManager extends Scene {
 
         Ground.action.unsubscribe(this.ground_ActionCallback, this);
         MapObject.action.unsubscribe(this.MapObject_ActionCallback, this);
-
-
     }
 
     // private pointerDownLogic(data: PointerEvent):void {
@@ -62,7 +62,7 @@ export class GameManager extends Scene {
     //     // this.movePlayer(data.position.x, data.position.y);
     // }
 
-    protected ChangeMap(newMap: string){
+    public ChangeMap(): void{
         
         this.currentMap.interactive = false;
         // this.currentMap.removeObjects();
@@ -73,17 +73,18 @@ export class GameManager extends Scene {
             ease: Easing.Linear,
             onComplete: () => {
                 
-                console.log("NewMap -> " + newMap);
+                console.log("NewMap -> " + this.newMap);
                 const fadeManager = new FadeManager();
                 // fadeManager.fadeOut(this, 500, false);
                 this.currentMap.removeObjects();
                 this.remove(this.currentMap);
                 
-
-                this.currentMap = new Map(this, newMap);
+                this.currentMap = new Map(this, this.newMap);
                 this.add(this.currentMap);
 
                 this.player.setCurrentGround(this.currentMap.getGroundArray()[0]);
+                this.move(this.player, LAYER.OBJECTS + this.player.position.y);
+                this.camera.moveTo(this.player.position.x, this.player.position.y);
                 fadeManager.fadeIn(this, 1000);
                 // this.destroy();
             },
@@ -93,7 +94,7 @@ export class GameManager extends Scene {
         }, true);
     }
 
-    private AStarTest(data: any[]){
+    private AStarTest(data: any[], changeMap?: boolean){
         console.log("TEST ASTART PATHFINDING");
         
         // console.log("DATA: " + data[0] + " , " + data[1]);
@@ -125,7 +126,7 @@ export class GameManager extends Scene {
             }
             // console.log(path);
             
-            this.player.moveToNextPos(1, path);
+            this.player.moveToNextPos(1, path, changeMap);
             
         }else{
             // console.log("Is the same position");
@@ -137,7 +138,7 @@ export class GameManager extends Scene {
     private spawnPlayer(): void{
         // const randomGround: Ground = ThunderMath.randomChoice(this.groundArray);
 
-        this.player = new Player(this, this.currentMap.getGroundArray()[0]);
+        this.player = new Player(this, this.currentMap.getGroundArray()[0], this);
 
         console.log(this.player.position.x + " , " + this.player.position.y);
         this.move(this.player, LAYER.OBJECTS + this.player.position.y);

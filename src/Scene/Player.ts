@@ -1,4 +1,5 @@
-import { Scene, ActionData, AnimatedSprite, Easing, ThunderMath} from "@gamindo/thunder"
+import { Scene, ActionData, AnimatedSprite, Easing, ThunderMath, Game} from "@gamindo/thunder"
+import { GameManager } from "./GameManager";
 import { Ground } from "./Ground";
 // import { InteractiveObjects } from "./InteractiveObjects";
 import { LAYER } from "./Map";
@@ -28,8 +29,9 @@ export class Player extends AnimatedSprite{
     private currentGridPos: any;
     public currentRow: number;
     public currentCol: number;
+    private gameManager?: GameManager;
 
-    constructor(scene: Scene, startGround: Ground){
+    constructor(scene: Scene, startGround: Ground, gameManager: GameManager){
         super(scene, ["player/player_DownRight0"]);
 
         this.pivot.set(0.5, 0.85);
@@ -44,6 +46,10 @@ export class Player extends AnimatedSprite{
         this.fps = 10;
         this.isPaused = true;
         this.currentAnim = this.walk_DownRight;
+
+
+        this.gameManager = gameManager;
+        console.log("GameManager -> "+ this.gameManager);
 
         
         // this.interactive = true;
@@ -108,7 +114,7 @@ export class Player extends AnimatedSprite{
     //     }
     // }
 
-    public moveToNextPos(index: number, data: Ground[]): void{
+    public moveToNextPos(index: number, data: Ground[], changeMap?: boolean): void{
         this.scene.tweenManager.cleanTarget(this.position);
 
         this.scene.tweenManager.add({
@@ -129,14 +135,19 @@ export class Player extends AnimatedSprite{
                 if(index < data.length-1){
                     // console.log("Move to next Pos: " + index++);
                     index++;
-                    this.moveToNextPos(index, data);
+                    this.moveToNextPos(index, data, changeMap);
                     this.currentRow = data[index-1].getRow();
                     this.currentCol = data[index-1].getCol();
 
                     this.currentGridPos = data[index-1];
                     // console.log(this.currentGridPos);
                 }else{
-                    console.log("Eseguo azione dell'oggetto cliccato!");
+                    console.log("Ultima posizione raggiunta!");
+                    console.log("Change map? ->" + changeMap);
+                    if(changeMap){
+                        console.log("Eseguo azione dell'oggetto cliccato!");
+                        this.gameManager?.ChangeMap();
+                    } 
                 }
                 
 
