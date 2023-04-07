@@ -33,7 +33,7 @@ export class Ground extends Sprite{
         this.h = 0;
         this.neighbors = [];
 
-        if(frame == 0){
+        if(frame == 0 || frame == 2 || frame == 3 || frame == 4 || frame == 5){
             this.interactive = true;
             this.walkable = true;
         }else{

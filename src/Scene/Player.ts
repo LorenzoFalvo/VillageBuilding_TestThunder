@@ -49,7 +49,7 @@ export class Player extends AnimatedSprite{
 
 
         this.gameManager = gameManager;
-        console.log("GameManager -> "+ this.gameManager);
+        // console.log("GameManager -> "+ this.gameManager);
 
         
         // this.interactive = true;
@@ -131,22 +131,22 @@ export class Player extends AnimatedSprite{
                 // this.updateFrames({frames: this.walk_DownRight});
                 // this.currentGridPos = data[i];
                 data[index].setFrame("grounds/isocube");
+                this.currentRow = data[index].getRow();
+                this.currentCol = data[index].getCol();
+                this.currentGridPos = data[index];
 
                 if(index < data.length-1){
                     // console.log("Move to next Pos: " + index++);
                     index++;
                     this.moveToNextPos(index, data, changeMap);
-                    this.currentRow = data[index-1].getRow();
-                    this.currentCol = data[index-1].getCol();
-
-                    this.currentGridPos = data[index-1];
+                    
                     // console.log(this.currentGridPos);
                 }else{
-                    console.log("Ultima posizione raggiunta!");
-                    console.log("Change map? ->" + changeMap);
+                    // console.log("Ultima posizione raggiunta!");
+                    // console.log("Change map? ->" + changeMap);
                     if(changeMap){
-                        console.log("Eseguo azione dell'oggetto cliccato!");
-                        this.gameManager?.ChangeMap();
+                        // console.log("Eseguo azione dell'oggetto cliccato!");
+                        this.gameManager?.changeMap();
                     } 
                 }
                 

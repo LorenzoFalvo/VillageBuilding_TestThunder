@@ -1069,29 +1069,33 @@
                     "frame": 2,
                     "row": 0,
                     "col": 0,
-                    "goToMap": "secondTest",
-                    "nextGroundPos": 1
+                    "goToMap": "floor2",
+                    "nextGroundPos": 1,
+                    "unlocked": true
                 },
                 {
                     "frame": 4,
                     "row": 8,
                     "col": 0,
                     "goToMap": "secondTest",
-                    "nextGroundPos": 0
+                    "nextGroundPos": 0,
+                    "unlocked": false
                 },
                 {
                     "frame": 5,
                     "row": 17,
                     "col": 0,
                     "goToMap": "floor1",
-                    "nextGroundPos": 2
+                    "nextGroundPos": 2,
+                    "unlocked": true
                 },
                 {
                     "frame": 3,
                     "row": 13,
                     "col": 11,
                     "goToMap": "secondTest",
-                    "nextGroundPos": 1
+                    "nextGroundPos": 1,
+                    "unlocked": false
                 }
             ],
             "objects": [
@@ -1872,29 +1876,33 @@
                     "frame": 4,
                     "row": 1,
                     "col": 0,
-                    "goToMap": "secondTest",
-                    "nextGroundPos": 0
+                    "goToMap": "floor1",
+                    "nextGroundPos": 0,
+                    "unlocked": false
                 },
                 {
                     "frame": 5,
                     "row": 8,
                     "col": 0,
                     "goToMap": "test",
-                    "nextGroundPos": 0
+                    "nextGroundPos": 0,
+                    "unlocked": false
                 },
                 {
                     "frame": 2,
                     "row": 1,
                     "col": 8,
-                    "goToMap": "test",
-                    "nextGroundPos": 0
+                    "goToMap": "floor2",
+                    "nextGroundPos": 0,
+                    "unlocked": true
                 },
                 {
                     "frame": 3,
                     "row": 8,
                     "col": 8,
                     "goToMap": "floor1",
-                    "nextGroundPos": 0
+                    "nextGroundPos": 0,
+                    "unlocked": true
                 }
             ],
             "objects": [
@@ -2203,21 +2211,24 @@
                     "row": 2,
                     "col": 0,
                     "goToMap": "secondTest",
-                    "nextGroundPos": 0
+                    "nextGroundPos": 3,
+                    "unlocked": true
                 },
                 {
                     "frame": 5,
                     "row": 6,
                     "col": 6,
                     "goToMap": "test",
-                    "nextGroundPos": 0
+                    "nextGroundPos": 0,
+                    "unlocked": false
                 },
                 {
                     "frame": 2,
                     "row": 2,
                     "col": 8,
                     "goToMap": "test",
-                    "nextGroundPos": 2
+                    "nextGroundPos": 2,
+                    "unlocked": true
                 }
             ],
             "objects": [
@@ -2234,6 +2245,382 @@
             ],
             "row": 10,
             "col": 15
+        },
+        "floor2": {
+            "grounds": [
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {
+                    "frame": 0,
+                    "x": 35,
+                    "y": 842.5,
+                    "row": 6,
+                    "col": 0
+                },
+                {
+                    "frame": 5,
+                    "x": 35,
+                    "y": 899.5,
+                    "row": 7,
+                    "col": 0
+                },
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {
+                    "frame": 0,
+                    "x": 93,
+                    "y": 785.5,
+                    "row": 5,
+                    "col": 1
+                },
+                {
+                    "frame": 0,
+                    "x": 93,
+                    "y": 842.5,
+                    "row": 6,
+                    "col": 1
+                },
+                {
+                    "frame": 0,
+                    "x": 93,
+                    "y": 899.5,
+                    "row": 7,
+                    "col": 1
+                },
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {
+                    "frame": 0,
+                    "x": 151,
+                    "y": 728.5,
+                    "row": 4,
+                    "col": 2
+                },
+                {
+                    "frame": 0,
+                    "x": 151,
+                    "y": 785.5,
+                    "row": 5,
+                    "col": 2
+                },
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {
+                    "frame": 1,
+                    "x": 209,
+                    "y": 671.5,
+                    "row": 3,
+                    "col": 3
+                },
+                {
+                    "frame": 0,
+                    "x": 209,
+                    "y": 728.5,
+                    "row": 4,
+                    "col": 3
+                },
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {
+                    "frame": 1,
+                    "x": 267,
+                    "y": 671.5,
+                    "row": 3,
+                    "col": 4
+                },
+                {
+                    "frame": 0,
+                    "x": 267,
+                    "y": 728.5,
+                    "row": 4,
+                    "col": 4
+                },
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {
+                    "frame": 1,
+                    "x": 325,
+                    "y": 671.5,
+                    "row": 3,
+                    "col": 5
+                },
+                {
+                    "frame": 0,
+                    "x": 325,
+                    "y": 728.5,
+                    "row": 4,
+                    "col": 5
+                },
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {
+                    "frame": 1,
+                    "x": 383,
+                    "y": 671.5,
+                    "row": 3,
+                    "col": 6
+                },
+                {
+                    "frame": 0,
+                    "x": 383,
+                    "y": 728.5,
+                    "row": 4,
+                    "col": 6
+                },
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {
+                    "frame": 1,
+                    "x": 441,
+                    "y": 671.5,
+                    "row": 3,
+                    "col": 7
+                },
+                {
+                    "frame": 0,
+                    "x": 441,
+                    "y": 728.5,
+                    "row": 4,
+                    "col": 7
+                },
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {
+                    "frame": 1,
+                    "x": 499,
+                    "y": 671.5,
+                    "row": 3,
+                    "col": 8
+                },
+                {
+                    "frame": 0,
+                    "x": 499,
+                    "y": 728.5,
+                    "row": 4,
+                    "col": 8
+                },
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {
+                    "frame": 0,
+                    "x": 557,
+                    "y": 728.5,
+                    "row": 4,
+                    "col": 9
+                },
+                {
+                    "frame": 0,
+                    "x": 557,
+                    "y": 785.5,
+                    "row": 5,
+                    "col": 9
+                },
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {
+                    "frame": 0,
+                    "x": 615,
+                    "y": 785.5,
+                    "row": 5,
+                    "col": 10
+                },
+                {
+                    "frame": 0,
+                    "x": 615,
+                    "y": 842.5,
+                    "row": 6,
+                    "col": 10
+                },
+                {
+                    "frame": 0,
+                    "x": 615,
+                    "y": 899.5,
+                    "row": 7,
+                    "col": 10
+                },
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {
+                    "frame": 0,
+                    "x": 673,
+                    "y": 842.5,
+                    "row": 6,
+                    "col": 11
+                },
+                {
+                    "frame": 5,
+                    "x": 673,
+                    "y": 899.5,
+                    "row": 7,
+                    "col": 11
+                },
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {}
+            ],
+            "doors": [
+                {
+                    "frame": 5,
+                    "row": 7,
+                    "col": 0,
+                    "goToMap": "secondTest",
+                    "nextGroundPos": 2,
+                    "unlocked": true
+                },
+                {
+                    "frame": 5,
+                    "row": 7,
+                    "col": 11,
+                    "goToMap": "test",
+                    "nextGroundPos": 0,
+                    "unlocked": true
+                }
+            ],
+            "objects": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            "row": 13,
+            "col": 14
         }
+
+
     }
 }

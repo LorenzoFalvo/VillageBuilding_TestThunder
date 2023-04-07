@@ -1,5 +1,5 @@
 import { Easing, Group, Loader, Point, Scene, Sprite, TweenAnimation} from "@gamindo/thunder";
-import { Chair, Door } from "./MapObject";
+import { Door } from "./Door";
 import { Ground } from "./Ground";
 // import { InteractiveObjects } from "./InteractiveObjects";
 
@@ -24,14 +24,14 @@ export class Map extends Group{
 
     constructor(scene: Scene, currentMap: string){
         super(scene);
-        console.log("Create Map");
+        // console.log("Create Map");
         const mapsJsonString = JSON.stringify(Loader.getJson("mapsJson"));
         this.allMaps = JSON.parse(mapsJsonString);
         
         this.currentMap = this.getCurrentMap(currentMap);
         this.createGround();
 
-        // this.interactive = true;
+        this.interactive = false;
         // this.onPointerDown.subscribe(this.pointerDownLogic, this);
     }
 
@@ -58,6 +58,10 @@ export class Map extends Group{
             
             case "floor1":
                 currentMap = this.allMaps.maps.floor1;
+                break;
+
+            case "floor2":
+                currentMap = this.allMaps.maps.floor2;
                 break;
 
             default:
@@ -104,7 +108,7 @@ export class Map extends Group{
             }
         }
 
-        console.log(this.gridArray);
+        // console.log(this.gridArray);
 
         this.sortGrid(this.groundArray);
         this.createObjects();
@@ -142,7 +146,7 @@ export class Map extends Group{
                     break;
 
                 default:
-                    console.log("Don't have frame!");
+                    // console.log("Don't have frame!");
             }
         }
         this.sortObjects(this.objectsArray, LAYER.OBJECTS);
@@ -151,7 +155,7 @@ export class Map extends Group{
     private createDoors(): void{
         // console.log("Doors" + this.currentMap.doors);
         const doorsArray = this.currentMap.doors;
-        console.log("Doors" + doorsArray);
+        // console.log("Doors" + doorsArray);
         var newObject: any;
 
         for (let i = 0; i < doorsArray.length; i++) {
@@ -161,38 +165,39 @@ export class Map extends Group{
             const groundPos = this.gridArray[row][col];
             const goToMap = doorsArray[i].goToMap;
             const nextGroundPos = doorsArray[i].nextGroundPos;
+            const unlocked = doorsArray[i].unlocked;
 
-            console.log("Ground Pos" + groundPos);
+            // console.log("Ground Pos" + groundPos);
 
             switch(frame){
                 case 2:
-                    newObject = new Door(this.scene, "buildings/doorLeft", groundPos, goToMap, nextGroundPos);
+                    newObject = new Door(this.scene, "buildings/doorLeft", groundPos, goToMap, nextGroundPos, unlocked);
                     newObject.pivot.set(0.7, 0.96);
-                    this.objectsArray.push(newObject);
+                    // this.objectsArray.push(newObject);
                     this.scene.add(newObject);
                     this.scene.move(newObject, LAYER.BACK_DOOR);
                     break;
 
                 case 3:
-                    newObject = new Door(this.scene, "buildings/doorRight", groundPos, goToMap, nextGroundPos);
+                    newObject = new Door(this.scene, "buildings/doorRight", groundPos, goToMap, nextGroundPos, unlocked);
                     newObject.pivot.set(0.3, 0.96);
-                    this.objectsArray.push(newObject);
+                    // this.objectsArray.push(newObject);
                     this.scene.add(newObject);
                     this.scene.move(newObject, LAYER.BACK_DOOR);
                     break;
 
                 case 4:
-                    newObject = new Door(this.scene, "buildings/doorRight", groundPos, goToMap, nextGroundPos);
+                    newObject = new Door(this.scene, "buildings/doorRight", groundPos, goToMap, nextGroundPos, unlocked);
                     newObject.pivot.set(0.67, 0.73);
-                    this.objectsArray.push(newObject);
+                    // this.objectsArray.push(newObject);
                     this.scene.add(newObject);
                     this.scene.move(newObject, LAYER.FRONT_DOOR + newObject.position.y);
                     break;
 
                 case 5:
-                    newObject = new Door(this.scene, "buildings/doorLeft", groundPos, goToMap, nextGroundPos);
+                    newObject = new Door(this.scene, "buildings/doorLeft", groundPos, goToMap, nextGroundPos, unlocked);
                     newObject.pivot.set(0.33, 0.73);
-                    this.objectsArray.push(newObject);
+                    // this.objectsArray.push(newObject);
                     this.scene.add(newObject);
                     this.scene.move(newObject, LAYER.FRONT_DOOR + newObject.position.y);
                     break;
@@ -245,6 +250,9 @@ export class Map extends Group{
         for(let i = 0; i < this.objectsArray.length; i++){
             this.scene.remove(this.objectsArray[i]);
         }
+        for(let i = 0; i < this.doorsArray.length; i++){
+            this.scene.remove(this.doorsArray[i]);
+        }
         // for(let i = 0; i < this.objectsArray.length; i++){
         //     this.scene.tweenManager.add({
         //         target:this.objectsArray[i],
@@ -260,5 +268,17 @@ export class Map extends Group{
     public getNextGroundPos(doorIndex: number): Ground{
         const nextGround = this.doorsArray[doorIndex].getGroundPos();
         return nextGround;
+    }
+
+    public modifyAllMapInteractivity(interactive: boolean){
+        this.interactive = interactive;
+
+        console.log("Doors lenght-> "+ this.doorsArray.length);
+        for(let i = 0; i < this.doorsArray.length; i++){
+            this.doorsArray[i].interactive = interactive;
+        }
+        for(let i = 0; i < this.objectsArray.length; i++){
+            this.objectsArray[i].interactive = interactive;
+        }
     }
 }

@@ -5,6 +5,7 @@ import { Ground } from "./Ground";
 // import { InteractiveObjects } from "./InteractiveObjects";
 import { LAYER, Map } from "./Map";
 import { Player } from "./Player";
+import { Door } from "./Door";
 
 
 
@@ -13,13 +14,12 @@ export class GameManager extends Scene {
 
     // private background!: Sprite;
     private currentMap!: Map;
-    private newMap: string = "";
-    private nextGroundPos: number = 0;
+    private doorReference!: Door;
     private player!: Player;
     // private chooseActionCallback: (data: any[])=>void = (data)=>{this.player.moveToNextPos(data[0]);};
     private ground_ActionCallback: (data: any[])=>void = (data)=>{this.AStarTest(data);};
     // private MapObject_ActionCallback: (data: any[])=>void = (data)=>{this.ChangeMap(data[0]);};
-    private MapObject_ActionCallback: (data: any[])=>void = (data)=>{this.AStarTest(data, true); this.newMap = data[2]; this.nextGroundPos = data[3]};
+    private MapObject_ActionCallback: (data: any[])=>void = (data)=>{this.doorReference = data[2]; this.AStarTest(data, true); };
     
 
 
@@ -34,14 +34,14 @@ export class GameManager extends Scene {
 
     override create(): void {
         super.create();
-        console.log("Call create super func");
 
-        this.currentMap = new Map(this, "test");
+        this.currentMap = new Map(this, "secondTest");
         this.spawnPlayer();
 
         this.add(this.currentMap);
 
-        this.interactive = true;
+        this.interactive = false;
+        this.currentMap.modifyAllMapInteractivity(true);
         // this.onPointerDown.subscribe(this.pointerDownLogic, this);
 
         Ground.action.subscribe(this.ground_ActionCallback, this);
@@ -63,42 +63,65 @@ export class GameManager extends Scene {
     //     // this.movePlayer(data.position.x, data.position.y);
     // }
 
-    public ChangeMap(): void{
+    public changeMap(): void{
         
-        this.currentMap.interactive = false;
-        let newGroundPos: Ground;
-        // this.currentMap.removeObjects();
+        const doorUnlocked: boolean = this.doorReference.isUnlocked();
+        if(doorUnlocked){
+            this.interactive = false;
+            this.currentMap.modifyAllMapInteractivity(false);
+            let newGroundPos: Ground;
+            let nextGroundPos: number;
+            let newMap: string;
+            // this.currentMap.removeObjects();
 
-        this.tweenManager.add({
-            target: this,
-            duration: 500,
-            ease: Easing.Linear,
-            onComplete: () => {
-                
-                console.log("NewMap -> " + this.newMap);
-                const fadeManager = new FadeManager();
-                // fadeManager.fadeOut(this, 500, false);
-                this.currentMap.removeObjects();
-                this.remove(this.currentMap);
-                
-                this.currentMap = new Map(this, this.newMap);
-                this.add(this.currentMap);
+            this.tweenManager.add({
+                target: this,
+                duration: 500,
+                ease: Easing.Linear,
+                onComplete: () => {
+                    nextGroundPos = this.doorReference.getNextGroundPos();
+                    newMap = this.doorReference.getNextMap();
+                    console.log("NewMap -> " + newMap);
+                    // const fadeManager = new FadeManager();
+                    // fadeManager.fadeOut(this, 500, false);
+                    this.currentMap.removeObjects();
+                    this.remove(this.currentMap);
+                    
+                    this.currentMap = new Map(this, newMap);
+                    this.add(this.currentMap);
 
-                newGroundPos = this.currentMap.getNextGroundPos(this.nextGroundPos);
-                this.player.setCurrentGround(newGroundPos);
-                this.move(this.player, LAYER.OBJECTS + this.player.position.y);
-                this.camera.moveTo(this.player.position.x, this.player.position.y);
-                fadeManager.fadeIn(this, 1000);
-                // this.destroy();
-            },
-            options: {
-                alpha: 0, 
-            }
-        }, true);
+                    newGroundPos = this.currentMap.getNextGroundPos(nextGroundPos);
+                    this.player.setCurrentGround(newGroundPos);
+                    this.move(this.player, LAYER.OBJECTS + this.player.position.y);
+                    this.camera.moveTo(this.player.position.x, this.player.position.y);
+
+                    this.tweenManager.add({
+                        target: this,
+                        duration: 500,
+                        ease: Easing.Linear,
+                        onComplete: () => {
+                            
+                            this.currentMap.modifyAllMapInteractivity(true);
+                        },
+                        options: {
+                            alpha: 1, 
+                        }
+                    }, true);
+                    // fadeManager.fadeIn(this, 1000);
+                    // this.currentMap.modifyAllMapInteractivity(true);
+                },
+                options: {
+                    alpha: 0, 
+                }
+            }, true);
+        }else{
+            console.log("Door is locked!");
+        }
+        
     }
 
     private AStarTest(data: any[], changeMap?: boolean){
-        console.log("TEST ASTART PATHFINDING");
+        // console.log("TEST ASTART PATHFINDING");
         
         // console.log("DATA: " + data[0] + " , " + data[1]);
         // console.log(this.currentMap.gridArray[data[0]][data[1]]);
@@ -123,16 +146,22 @@ export class GameManager extends Scene {
             const path = astar.findPath();
 
             astar.shutdown();
-            
-            for(let i = 1; i < path.length; i++){
-                path[i].setFrame("grounds/isocube_green");
+
+            if(path.length > 0){
+                for(let i = 1; i < path.length; i++){
+                    path[i].setFrame("grounds/isocube_green");
+                }
+                // console.log(path);
+                
+                this.player.moveToNextPos(1, path, changeMap);
+            }else{
+                console.log("Grid non raggiungibile");
             }
-            // console.log(path);
             
-            this.player.moveToNextPos(1, path, changeMap);
             
-        }else{
-            // console.log("Is the same position");
+        }else if(changeMap){
+            this.changeMap();
+            console.log("Is the same position");
         }
 
         
@@ -143,7 +172,7 @@ export class GameManager extends Scene {
 
         this.player = new Player(this, this.currentMap.getGroundArray()[0], this);
 
-        console.log(this.player.position.x + " , " + this.player.position.y);
+        // console.log(this.player.position.x + " , " + this.player.position.y);
         this.move(this.player, LAYER.OBJECTS + this.player.position.y);
 
         this.camera.moveTo(this.player.position.x, this.player.position.y);
